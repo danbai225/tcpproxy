@@ -1,4 +1,4 @@
-module github/danbai225/tcpproxy
+module github.com/danbai225/tcpproxy
 
 go 1.17
 
