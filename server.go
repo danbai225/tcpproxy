@@ -1,4 +1,4 @@
-package main
+package tcpproxy
 
 import (
 	logs "github.com/danbai225/go-logs"

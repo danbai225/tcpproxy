@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	logs "github.com/danbai225/go-logs"
+	"github.com/danbai225/tcpproxy"
 )
 
 var server bool
@@ -24,8 +25,8 @@ func main() {
 		return
 	}
 	if server {
-		Server{}.New(pass, addr, fmt.Sprintf(":%s", port)).Start()
+		tcpproxy.Server{}.New(pass, addr, fmt.Sprintf(":%s", port)).Start()
 	} else {
-		Client{}.New(pass, addr, fmt.Sprintf(":%s", port)).Start()
+		tcpproxy.Client{}.New(pass, addr, fmt.Sprintf(":%s", port)).Start()
 	}
 }
