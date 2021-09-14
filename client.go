@@ -13,6 +13,7 @@ type Client struct {
 	lAddr      string
 	serverAddr string
 	session    *smux.Session
+	listen     net.Listener
 }
 
 func (Client) New(pass, serverAddr, lAddr string) *Client {
@@ -23,7 +24,8 @@ func (Client) New(pass, serverAddr, lAddr string) *Client {
 	}
 }
 func (c *Client) Start() {
-	listen, err := net.Listen("tcp", c.lAddr)
+	var err error
+	c.listen, err = net.Listen("tcp", c.lAddr)
 	if err != nil {
 		logs.Err(err)
 		return
@@ -34,12 +36,15 @@ func (c *Client) Start() {
 		return
 	}
 	logs.Info("客户端启动成功", c.lAddr, "->", c.serverAddr)
-	for listen != nil {
-		accept, err2 := listen.Accept()
+	for c.listen != nil {
+		accept, err2 := c.listen.Accept()
 		if err2 == nil {
 			go c.hanC(accept)
 		}
 	}
+}
+func (c *Client) Stop() error {
+	return c.listen.Close()
 }
 func (c *Client) connServer() error {
 	conn2, err := net.Dial("tcp", c.serverAddr)
