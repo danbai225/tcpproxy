@@ -17,13 +17,12 @@ type Server struct {
 func (Server) New(sPass, dstAddr, listenAddr string) *Server {
 	return &Server{listenAddr: listenAddr, pass: sPass, dstAddr: dstAddr}
 }
-func (s *Server) Start() {
+func (s *Server) Start() error {
 	//监听端口
 	var err error
 	s.listen, err = net.Listen("tcp", s.listenAddr)
 	if err != nil {
-		logs.Err(err)
-		return
+		return err
 	}
 	logs.Info("服务端启动成功", s.listenAddr, "->", s.dstAddr)
 	for s.listen != nil {
@@ -35,6 +34,7 @@ func (s *Server) Start() {
 		//认证连接
 		go s.auth(c)
 	}
+	return nil
 }
 func (s *Server) Stop() error {
 	return s.listen.Close()

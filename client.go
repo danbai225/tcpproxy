@@ -23,17 +23,15 @@ func (Client) New(pass, serverAddr, lAddr string) *Client {
 		serverAddr: serverAddr,
 	}
 }
-func (c *Client) Start() {
+func (c *Client) Start() error {
 	var err error
 	c.listen, err = net.Listen("tcp", c.lAddr)
 	if err != nil {
-		logs.Err(err)
-		return
+		return err
 	}
 	err = c.connServer()
 	if err != nil {
-		logs.Err(err)
-		return
+		return err
 	}
 	logs.Info("客户端启动成功", c.lAddr, "->", c.serverAddr)
 	for c.listen != nil {
@@ -42,6 +40,7 @@ func (c *Client) Start() {
 			go c.hanC(accept)
 		}
 	}
+	return nil
 }
 func (c *Client) Stop() error {
 	return c.listen.Close()
