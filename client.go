@@ -1,5 +1,6 @@
 package tcpproxy
 
+import "C"
 import (
 	"errors"
 	logs "github.com/danbai225/go-logs"
@@ -90,8 +91,10 @@ func (c *Client) hanC(con net.Conn) {
 	}()
 	if err != nil {
 		logs.Err(err)
-		_ = c.session.Close()
-		c.session = nil
+		if c.session != nil {
+			_ = c.session.Close()
+			c.session = nil
+		}
 		return
 	}
 	go func() {
