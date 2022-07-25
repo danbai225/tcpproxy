@@ -1,6 +1,5 @@
 package tcpproxy
 
-import "C"
 import (
 	"errors"
 	logs "github.com/danbai225/go-logs"
@@ -86,7 +85,7 @@ func (c *Client) hanC(con net.Conn) {
 	stream, err := c.session.OpenStream()
 	defer func() {
 		if stream != nil {
-			stream.Close()
+			_ = stream.Close()
 		}
 	}()
 	if err != nil {
@@ -98,8 +97,8 @@ func (c *Client) hanC(con net.Conn) {
 		return
 	}
 	go func() {
-		io.Copy(con, stream)
-		con.Close()
+		_, _ = io.Copy(con, stream)
+		_ = con.Close()
 	}()
-	io.Copy(stream, con)
+	_, _ = io.Copy(stream, con)
 }

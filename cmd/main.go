@@ -25,8 +25,8 @@ func main() {
 		return
 	}
 	if server {
-		tcpproxy.Server{}.New(pass, addr, fmt.Sprintf(":%s", port)).Start()
+		_ = tcpproxy.Server{}.New(pass, addr, fmt.Sprintf(":%s", port)).Start()
 	} else {
-		tcpproxy.Client{}.New(pass, addr, fmt.Sprintf(":%s", port)).Start()
+		_ = tcpproxy.Client{}.New(pass, addr, fmt.Sprintf(":%s", port)).Start()
 	}
 }

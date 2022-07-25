@@ -99,8 +99,8 @@ func (s *Server) handStream(stream *smux.Stream) {
 	}()
 	//对拷流量
 	go func() {
-		io.Copy(dial, stream)
-		dial.Close()
+		_, _ = io.Copy(dial, stream)
+		_ = dial.Close()
 	}()
-	io.Copy(stream, dial)
+	_, _ = io.Copy(stream, dial)
 }
